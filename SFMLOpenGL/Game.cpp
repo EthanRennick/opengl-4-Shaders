@@ -114,8 +114,8 @@ void Game::initialize()
 		"in vec4 sv_color;"
 		"out vec4 color;"
 		"void main() {"
-		"color = sv_color;"
-		"gl_Position = sv_position;"
+		"	color = sv_color;"
+		"	gl_Position = sv_position;"
 		"}"; //Vertex Shader Src
 
 	DEBUG_MSG("Setting Up Vertex Shader");
@@ -138,10 +138,8 @@ void Game::initialize()
 
 	/* Fragment Shader which would normally be loaded from an external file */
 	const char* fs_src = "#version 400\n\r"
-		"uniform sampler2D f_texture;"
 		"in vec4 color;"
 		"out vec4 fColor;"
-		"vec4 temp_color;"
 		"void main() {"
 		"	fColor = vec4(0.0f, 1.0f, 0.0f, 1.0f);"
 		"}"; //Fragment Shader Src
@@ -217,17 +215,17 @@ void Game::update()
 	}
 
 	//Change vertex data
-	//vertex[0].coordinate[0] += -0.0001f;
-	//vertex[0].coordinate[1] += -0.0001f;
-	//vertex[0].coordinate[2] += -0.0001f;
+	vertex[0].coordinate[0] += -0.0001f;
+	vertex[0].coordinate[1] += -0.0001f;
+	vertex[0].coordinate[2] += -0.0001f;
 
-	//vertex[1].coordinate[0] += -0.0001f;
-	//vertex[1].coordinate[1] += -0.0001f;
-	//vertex[1].coordinate[2] += -0.0001f;
+	vertex[1].coordinate[0] += -0.0001f;
+	vertex[1].coordinate[1] += -0.0001f;
+	vertex[1].coordinate[2] += -0.0001f;
 
-	//vertex[2].coordinate[0] += -0.0001f;
-	//vertex[2].coordinate[1] += -0.0001f;
-	//vertex[2].coordinate[2] += -0.0001f;
+	vertex[2].coordinate[0] += -0.0001f;
+	vertex[2].coordinate[1] += -0.0001f;
+	vertex[2].coordinate[2] += -0.0001f;
 
 #if (DEBUG >= 2)
 	DEBUG_MSG("Update up...");
@@ -251,10 +249,10 @@ void Game::render()
 
 	/*	As the data positions will be updated by the this program on the
 		CPU bind the updated data to the GPU for drawing	*/
-	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * 6, vertex, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * 3, vertex, GL_STATIC_DRAW);
 
 	/*	Draw Triangle from VBO	(set where to start from as VBO can contain
-		model compoents that are and are not to be drawn )	*/
+		model components that 'are' and 'are not' to be drawn )	*/
 
 	// Set pointers for each parameter
 	// https://www.opengl.org/sdk/docs/man4/html/glVertexAttribPointer.xhtml
@@ -265,7 +263,7 @@ void Game::render()
 	glEnableVertexAttribArray(positionID);
 	glEnableVertexAttribArray(colorID);
 
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, (char*)NULL + 0);
+	glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_BYTE, (char*)NULL + 0);
 
 	window.display();
 
