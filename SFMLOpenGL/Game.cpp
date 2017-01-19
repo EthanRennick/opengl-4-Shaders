@@ -40,8 +40,8 @@ typedef struct
 	float color[4];
 } Vertex;
 
-Vertex vertex[6];
-GLubyte triangles[6];
+Vertex vertex[3];
+GLubyte triangles[3];
 
 /* Variable to hold the VBO identifier and shader data */
 GLuint	index, //Index to draw
@@ -75,17 +75,17 @@ void Game::initialize()
 	vertex[2].coordinate[1] = 0.5f;
 	vertex[2].coordinate[2] = 0.0f;
 
-	vertex[0].color[0] = 1.0f;
+	vertex[0].color[0] = 0.0f;
 	vertex[0].color[1] = 0.0f;
 	vertex[0].color[2] = 0.0f;
 	vertex[0].color[3] = 1.0f;
 
-	vertex[1].color[0] = 1.0f;
+	vertex[1].color[0] = 0.0f;
 	vertex[1].color[1] = 0.0f;
 	vertex[1].color[2] = 0.0f;
 	vertex[1].color[3] = 1.0f;
 
-	vertex[2].color[0] = 1.0f;
+	vertex[2].color[0] = 0.0f;
 	vertex[2].color[1] = 0.0f;
 	vertex[2].color[2] = 0.0f;
 	vertex[2].color[3] = 1.0f;
@@ -143,8 +143,7 @@ void Game::initialize()
 		"out vec4 fColor;"
 		"vec4 temp_color;"
 		"void main() {"
-		"	temp_color = color * vec4(0.0f, 0.0f, 1.0f, 1.0f);"
-		"	fColor = temp_color;"
+		"	fColor = vec4(0.0f, 1.0f, 0.0f, 1.0f);"
 		"}"; //Fragment Shader Src
 
 	DEBUG_MSG("Setting Up Fragment Shader");
@@ -181,12 +180,12 @@ void Game::initialize()
 		DEBUG_MSG("ERROR: Shader Link Error");
 	}
 
-	//Use Progam on GPU
-	//https://www.opengl.org/sdk/docs/man/html/glUseProgram.xhtml
+	// Use Progam on GPU
+	// https://www.opengl.org/sdk/docs/man/html/glUseProgram.xhtml
 	glUseProgram(progID);
 
 	// Find variables in the shader
-	//https://www.khronos.org/opengles/sdk/docs/man/xhtml/glGetAttribLocation.xml
+	// https://www.khronos.org/opengles/sdk/docs/man/xhtml/glGetAttribLocation.xml
 	positionID = glGetAttribLocation(progID, "sv_position");
 	colorID = glGetAttribLocation(progID, "sv_color");
 }
@@ -218,17 +217,17 @@ void Game::update()
 	}
 
 	//Change vertex data
-	vertex[0].coordinate[0] += -0.0001f;
-	vertex[0].coordinate[1] += -0.0001f;
-	vertex[0].coordinate[2] += -0.0001f;
+	//vertex[0].coordinate[0] += -0.0001f;
+	//vertex[0].coordinate[1] += -0.0001f;
+	//vertex[0].coordinate[2] += -0.0001f;
 
-	vertex[1].coordinate[0] += -0.0001f;
-	vertex[1].coordinate[1] += -0.0001f;
-	vertex[1].coordinate[2] += -0.0001f;
+	//vertex[1].coordinate[0] += -0.0001f;
+	//vertex[1].coordinate[1] += -0.0001f;
+	//vertex[1].coordinate[2] += -0.0001f;
 
-	vertex[2].coordinate[0] += -0.0001f;
-	vertex[2].coordinate[1] += -0.0001f;
-	vertex[2].coordinate[2] += -0.0001f;
+	//vertex[2].coordinate[0] += -0.0001f;
+	//vertex[2].coordinate[1] += -0.0001f;
+	//vertex[2].coordinate[2] += -0.0001f;
 
 #if (DEBUG >= 2)
 	DEBUG_MSG("Update up...");
@@ -257,9 +256,10 @@ void Game::render()
 	/*	Draw Triangle from VBO	(set where to start from as VBO can contain
 		model compoents that are and are not to be drawn )	*/
 
-	//Set pointers for each parameter
-	glVertexAttribPointer(positionID, 3, GL_FLOAT, GL_FALSE, 0, 0);
-	glVertexAttribPointer(colorID, 4, GL_FLOAT, GL_FALSE, 0, 0);
+	// Set pointers for each parameter
+	// https://www.opengl.org/sdk/docs/man4/html/glVertexAttribPointer.xhtml
+	glVertexAttribPointer(positionID, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
+	glVertexAttribPointer(colorID, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
 
 	//Enable Arrays
 	glEnableVertexAttribArray(positionID);
