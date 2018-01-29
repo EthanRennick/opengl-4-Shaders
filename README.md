@@ -20,6 +20,7 @@ http://www.sfml-dev.org/files/SFML-2.3.2-windows-vc14-32-bit.zip "SFML-2.3.2-win
 * To check environment variable is set correctly open a command prompt and type `echo %GLEW_SDK%` the path to glew sdk should be show.
 * Select a project default target `x86` when running executable
 * If the project builds but does not `xcopy` the required dll's try moving your project to a directory you have full access to, see http://tinyurl.com/SFMLStarter for a guide on post build events.
+* Alternatively set the Environment Variable in Configuration Properties | Debugging | Environment to `PATH=%PATH%;%SFML_SDK%\bin` this will ensure DLL's are discoverable when running in debug mode with copying the DLL's to the executable directory
 
 ### Cloning Repository ###
 * Run GitBash and type the Follow commands into GitBash
