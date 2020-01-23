@@ -75,19 +75,19 @@ void Game::initialize()
 	vertex[2].coordinate[1] = 0.5f;
 	vertex[2].coordinate[2] = 0.0f;
 
-	vertex[0].color[0] = 0.0f;
+	vertex[0].color[0] = 0.5f;
 	vertex[0].color[1] = 0.0f;
-	vertex[0].color[2] = 0.0f;
+	vertex[0].color[2] = 0.5f;
 	vertex[0].color[3] = 1.0f;
 
-	vertex[1].color[0] = 0.0f;
+	vertex[1].color[0] = 0.5f;
 	vertex[1].color[1] = 0.0f;
-	vertex[1].color[2] = 0.0f;
+	vertex[1].color[2] = 0.5f;
 	vertex[1].color[3] = 1.0f;
 
-	vertex[2].color[0] = 0.0f;
+	vertex[2].color[0] = 0.5f;
 	vertex[2].color[1] = 0.0f;
-	vertex[2].color[2] = 0.0f;
+	vertex[2].color[2] = 0.5f;
 	vertex[2].color[3] = 1.0f;
 
 	/*Index of Poly / Triangle to Draw */
@@ -141,7 +141,7 @@ void Game::initialize()
 		"in vec4 color;"
 		"out vec4 fColor;"
 		"void main() {"
-		"	fColor = vec4(0.0f, 1.0f, 0.0f, 1.0f);"
+		"	fColor = color + vec4(0.0f, 1.0f, 0.0f, 1.0f);"
 		"}"; //Fragment Shader Src
 
 	DEBUG_MSG("Setting Up Fragment Shader");
@@ -257,7 +257,7 @@ void Game::render()
 	// Set pointers for each parameter
 	// https://www.opengl.org/sdk/docs/man4/html/glVertexAttribPointer.xhtml
 	glVertexAttribPointer(positionID, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
-	glVertexAttribPointer(colorID, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
+	glVertexAttribPointer(colorID, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (float*)NULL+3);
 
 	//Enable Arrays
 	glEnableVertexAttribArray(positionID);
