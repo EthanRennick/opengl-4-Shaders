@@ -121,7 +121,7 @@ void Game::initialize()
 	DEBUG_MSG("Setting Up Vertex Shader");
 
 	vsid = glCreateShader(GL_VERTEX_SHADER); //Create Shader and set ID
-	glShaderSource(vsid, 1, (const GLchar*)vs_src, NULL); // Set the shaders source
+	glShaderSource(vsid, 1, (const GLchar**)&vs_src, NULL); // Set the shaders source
 	glCompileShader(vsid); //Check that the shader compiles
 
 	//Check is Shader Compiled
