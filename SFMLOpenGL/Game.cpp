@@ -4,6 +4,7 @@ static bool flip;
 
 Game::Game() : window(VideoMode(800, 600), "OpenGL Cube Vertex and Fragment Shaders")
 {
+
 }
 
 Game::~Game() {}
@@ -48,8 +49,7 @@ GLuint	index, //Index to draw
 		vsid, //Vertex Shader ID
 		fsid, //Fragment Shader ID
 		progID, //Program ID
-		vao = 0, //Vertex Array ID
-		vbo[1], // Vertex Buffer ID
+		vbo = 1, // Vertex Buffer ID
 		positionID, //Position ID
 		colorID; // Color ID
 
@@ -94,10 +94,10 @@ void Game::initialize()
 	triangles[0] = 0;   triangles[1] = 1;   triangles[2] = 2;
 
 	/* Create a new VBO using VBO id */
-	glGenBuffers(1, vbo);
+	glGenBuffers(1, &vbo);
 
 	/* Bind the VBO */
-	glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
 	/* Upload vertex data to GPU */
 	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * 7, vertex, GL_STATIC_DRAW);
@@ -121,7 +121,7 @@ void Game::initialize()
 	DEBUG_MSG("Setting Up Vertex Shader");
 
 	vsid = glCreateShader(GL_VERTEX_SHADER); //Create Shader and set ID
-	glShaderSource(vsid, 1, (const GLchar**)&vs_src, NULL); // Set the shaders source
+	glShaderSource(vsid, 1, (const GLchar*)vs_src, NULL); // Set the shaders source
 	glCompileShader(vsid); //Check that the shader compiles
 
 	//Check is Shader Compiled
@@ -244,7 +244,7 @@ void Game::render()
 
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
-	glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, index);
 
 	/*	As the data positions will be updated by the this program on the
@@ -275,6 +275,6 @@ void Game::unload()
 	DEBUG_MSG("Cleaning up...");
 #endif
 	glDeleteProgram(progID);
-	glDeleteBuffers(1, vbo);
+	glDeleteBuffers(1, &vbo);
 }
 
