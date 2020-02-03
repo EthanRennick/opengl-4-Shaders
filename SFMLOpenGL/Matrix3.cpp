@@ -42,8 +42,8 @@ Matrix3::Matrix3(float _A11, float _A12, float _A13, float _A21, float _A22, flo
 gpp::Vector3 Matrix3::operator*(gpp::Vector3 V1)
 {// An overloaded operator * to return the  product of the matrix by a vector
 	return gpp::Vector3(A11 * V1.x + A12 * V1.y + A13 * V1.z,
-		A21 * V1.z + A22 * V1.y + A23 * V1.z,
-		A31 * V1.z + A32 * V1.y + A33 * V1.z);
+					    A21 * V1.x + A22 * V1.y + A23 * V1.z,
+					    A31 * V1.x + A32 * V1.y + A33 * V1.z);
 }
 
 Matrix3 Matrix3::Transpose(Matrix3 M1)
@@ -183,12 +183,12 @@ Matrix3 Matrix3::Translate(float dx, float dy)
 	Matrix3 answer = Matrix3();
 	answer.A11 = 1;
 	answer.A12 = 0;
-	answer.A13 = 0;
+	answer.A13 = dx;
 	answer.A21 = 0;
 	answer.A22 = 1;
-	answer.A23 = 0;
-	answer.A31 = dx;
-	answer.A32 = dy;
+	answer.A23 = dy;
+	answer.A31 = 0;
+	answer.A32 = 0;
 	answer.A33 = 1;
 
 	return answer;

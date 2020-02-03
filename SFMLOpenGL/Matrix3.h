@@ -60,7 +60,7 @@ public:
 
 	static Matrix3 RotationZ(float _angle);
 	
-	 Matrix3 Scale3D(int dx);
+	 static Matrix3 Scale3D(int dx);
 
 	 std::string toString()const; //done
 

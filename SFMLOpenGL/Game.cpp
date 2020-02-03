@@ -62,16 +62,17 @@ void Game::initialize()
 	isRunning = true;
 	GLint isCompiled = 0;
 	GLint isLinked = 0;
+	glEnable(GL_CULL_FACE);
 
 	glewInit();
-	cube.push_back(gpp::Vector3(1.0f, -1.0f, 1.0f)); //3 - 0
+	cube.push_back(gpp::Vector3(-1.0f, 1.0f, 1.0f)); //3 - 0
 	cube.push_back(gpp::Vector3(-1.0f, -1.0f, 1.0f)); //2 - 1
-	cube.push_back(gpp::Vector3(-1.0f, 1.0f, 1.0f)); //1 - 2
+	cube.push_back(gpp::Vector3(1.0f, -1.0f, 1.0f)); //1 - 2
 	cube.push_back(gpp::Vector3(1.0f, 1.0f, 1.0f)); //4 - 3
-	cube.push_back(gpp::Vector3(1.0f, -1.0f, -1.0f)); //7 - 4
+	cube.push_back(gpp::Vector3(-1.0f, 1.0f, -1.0f)); //7 - 4
 	cube.push_back(gpp::Vector3(1.0f, 1.0f, -1.0f)); //8 - 5
-	cube.push_back(gpp::Vector3(-1.0f, -1.0f, -1.0f)); //6 - 6
-	cube.push_back(gpp::Vector3(-1.0f, 1.0f, -1.0f)); //5 - 7
+	cube.push_back(gpp::Vector3(1.0f, -1.0f, -1.0f)); //6 - 6
+	cube.push_back(gpp::Vector3(-1.0f, -1.0f, -1.0f)); //5 - 7
 	/* Vertices counter-clockwise winding */
 
 	/* Vertices counter-clockwise winding */
@@ -140,18 +141,19 @@ void Game::initialize()
 	vertex[7].color[2] = 0.0f;
 
 
-	triangles[0] = 3;   triangles[1] = 0;   triangles[2] = 1;
-	triangles[3] = 1;   triangles[4] = 3;   triangles[5] = 2;
-	triangles[6] = 3;   triangles[7] = 7;   triangles[8] = 5;
-	triangles[9] = 7;   triangles[10] = 3;   triangles[11] = 2;
-	triangles[12] = 0;   triangles[13] = 5;   triangles[14] = 3;
-	triangles[15] = 1;   triangles[16] = 4;   triangles[17] = 0;
-	triangles[18] = 4;   triangles[19] = 0;   triangles[20] = 5;
-	triangles[21] = 1;   triangles[22] = 4;   triangles[23] = 6;
-	triangles[24] = 5;   triangles[25] = 4;   triangles[26] = 6;
-	triangles[27] = 5;   triangles[28] = 7;   triangles[29] = 6;
-	triangles[30] = 4;   triangles[31] = 6;   triangles[32] = 1;
-	triangles[33] = 2;   triangles[34] = 7;   triangles[35] = 1;
+	triangles[0] = 3;   triangles[1] = 0;   triangles[2] = 1; // Front
+	triangles[3] = 1;   triangles[4] = 2;   triangles[5] = 3;
+	triangles[6] = 3;   triangles[7] = 2;   triangles[8] = 6; // Right
+	triangles[9] = 6;   triangles[10] = 5;   triangles[11] = 3;
+	triangles[12] = 0;   triangles[13] = 3;   triangles[14] = 5; // Top
+	triangles[15] = 5;   triangles[16] = 4;   triangles[17] = 0;
+	triangles[18] = 7;   triangles[19] = 1;   triangles[20] = 0; // Left
+	triangles[21] = 0;   triangles[22] = 4;   triangles[23] = 7;
+	triangles[24] = 6;   triangles[25] = 2;   triangles[26] = 1; // Bottom
+	triangles[27] = 1;   triangles[28] = 7;   triangles[29] = 6;
+	triangles[30] = 4;   triangles[31] = 5;   triangles[32] = 6; // Back
+	triangles[33] = 6;   triangles[34] = 7;   triangles[35] = 4;
+
 
 	/*Index of Poly / Triangle to Draw */
 
@@ -162,12 +164,12 @@ void Game::initialize()
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
 	/* Upload vertex data to GPU */
-	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * 7, vertex, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * 36, vertex, GL_STATIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	glGenBuffers(1, &index);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, index);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLubyte) * 3, triangles, GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLubyte) * 36, triangles, GL_STATIC_DRAW);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 	/* Vertex Shader which would normally be loaded from an external file */
@@ -203,7 +205,8 @@ void Game::initialize()
 		"in vec4 color;"
 		"out vec4 fColor;"
 		"void main() {"
-		"	fColor = color + vec4(0.0f, 1.0f, 0.0f, 1.0f);"
+		"	fColor = color + vec4(0.0f, 0.0f, 0.5f, 1.0f);"
+		//"	fColor = color + vec4(0.0f, 1.0f, 0.0f, 1.0f);"
 		"}"; //Fragment Shader Src
 
 	DEBUG_MSG("Setting Up Fragment Shader");
@@ -424,80 +427,36 @@ void Game::update()
 
 		for (int i = 0; i < 8; i++)
 		{
-			cube[i] = Matrix3::Translate(-.01, 0) * cube[i];
+			float z = cube[i].z;
+			cube[i].z = 1.0f;
+
+			cube[i] = Matrix3::Translate(-0.01, 0) * cube[i];
+
+			vertex[i].coordinate[0] = (cube.at(i).x); //3
+			vertex[i].coordinate[1] = (cube.at(i).y); //3
+
+			cube[i].z = z;
 		}
-		vertex[0].coordinate[0] = (cube.at(0).x); //3
-		vertex[0].coordinate[1] = (cube.at(0).y); //3
-		vertex[0].coordinate[2] = (cube.at(0).z); //3
 
-		vertex[1].coordinate[0] = (cube.at(1).x); //1
-		vertex[1].coordinate[1] = (cube.at(1).y); //1
-		vertex[1].coordinate[2] = (cube.at(1).z); //1
-
-		vertex[2].coordinate[0] = (cube.at(2).x); //2
-		vertex[2].coordinate[1] = (cube.at(2).y); //2
-		vertex[2].coordinate[2] = (cube.at(2).z); //2
-
-		vertex[3].coordinate[0] = (cube.at(3).x); //3
-		vertex[3].coordinate[1] = (cube.at(3).y); //3
-		vertex[3].coordinate[2] = (cube.at(3).z); //3
-
-		vertex[4].coordinate[0] = (cube.at(4).x); //1
-		vertex[4].coordinate[1] = (cube.at(4).y); //1
-		vertex[4].coordinate[2] = (cube.at(4).z); //1
-
-		vertex[5].coordinate[0] = (cube.at(5).x); //2
-		vertex[5].coordinate[1] = (cube.at(5).y); //2
-		vertex[5].coordinate[2] = (cube.at(5).z); //2
-
-		vertex[6].coordinate[0] = (cube.at(6).x); //1
-		vertex[6].coordinate[1] = (cube.at(6).y); //1
-		vertex[6].coordinate[2] = (cube.at(6).z); //1
-
-		vertex[7].coordinate[0] = (cube.at(7).x); //2
-		vertex[7].coordinate[1] = (cube.at(7).y); //2
-		vertex[7].coordinate[2] = (cube.at(7).z); //2
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 	{
 		std::cout << "Translate attempt back" << std::endl;
 
+
 		for (int i = 0; i < 8; i++)
 		{
-			cube[i] = Matrix3::Translate(.01, 0) * cube[i];
+			float z = cube[i].z;
+			cube[i].z = 1.0f;
 
+			cube[i] = Matrix3::Translate(0.01, 0) * cube[i];
+
+			vertex[i].coordinate[0] = (cube.at(i).x); //3
+			vertex[i].coordinate[1] = (cube.at(i).y); //3
+
+			cube[i].z = z;
 		}
-		vertex[0].coordinate[0] = (cube.at(0).x); //3
-		vertex[0].coordinate[1] = (cube.at(0).y); //3
-		vertex[0].coordinate[2] = (cube.at(0).z); //3
 
-		vertex[1].coordinate[0] = (cube.at(1).x); //1
-		vertex[1].coordinate[1] = (cube.at(1).y); //1
-		vertex[1].coordinate[2] = (cube.at(1).z); //1
-
-		vertex[2].coordinate[0] = (cube.at(2).x); //2
-		vertex[2].coordinate[1] = (cube.at(2).y); //2
-		vertex[2].coordinate[2] = (cube.at(2).z); //2
-
-		vertex[3].coordinate[0] = (cube.at(3).x); //3
-		vertex[3].coordinate[1] = (cube.at(3).y); //3
-		vertex[3].coordinate[2] = (cube.at(3).z); //3
-
-		vertex[4].coordinate[0] = (cube.at(4).x); //1
-		vertex[4].coordinate[1] = (cube.at(4).y); //1
-		vertex[4].coordinate[2] = (cube.at(4).z); //1
-
-		vertex[5].coordinate[0] = (cube.at(5).x); //2
-		vertex[5].coordinate[1] = (cube.at(5).y); //2
-		vertex[5].coordinate[2] = (cube.at(5).z); //2
-
-		vertex[6].coordinate[0] = (cube.at(6).x); //1
-		vertex[6].coordinate[1] = (cube.at(6).y); //1
-		vertex[6].coordinate[2] = (cube.at(6).z); //1
-
-		vertex[7].coordinate[0] = (cube.at(7).x); //2
-		vertex[7].coordinate[1] = (cube.at(7).y); //2
-		vertex[7].coordinate[2] = (cube.at(7).z); //2
 	}
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
@@ -506,7 +465,7 @@ void Game::update()
 
 		for (int i = 0; i < 8; i++)
 		{
-			cube[i] = Matrix3::Scale(99, 99) * cube[i];
+			cube[i] = Matrix3().Scale3D(99) * cube[i];
 
 		}
 		vertex[0].coordinate[0] = (cube.at(0).x); //3
@@ -548,7 +507,7 @@ void Game::update()
 
 		for (int i = 0; i < 8; i++)
 		{
-			cube[i] = Matrix3::Scale(101, 101) * cube[i];
+			cube[i] = Matrix3().Scale3D(101) * cube[i];
 
 		}
 		vertex[0].coordinate[0] = (cube.at(0).x); //3
@@ -584,12 +543,15 @@ void Game::update()
 		vertex[7].coordinate[2] = (cube.at(7).z); //2
 	}
 
+
+
+}
 	
 #if (DEBUG >= 2)
 	DEBUG_MSG("Update up...");
 #endif
 
-}
+
 
 void Game::render()
 {
