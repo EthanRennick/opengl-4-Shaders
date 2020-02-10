@@ -206,7 +206,6 @@ void Game::initialize()
 		"out vec4 fColor;"
 		"void main() {"
 		"	fColor = color + vec4(0.0f, 0.0f, 0.5f, 1.0f);"
-		//"	fColor = color + vec4(0.0f, 1.0f, 0.0f, 1.0f);"
 		"}"; //Fragment Shader Src
 
 	DEBUG_MSG("Setting Up Fragment Shader");
@@ -251,6 +250,16 @@ void Game::initialize()
 	// https://www.khronos.org/opengles/sdk/docs/man/xhtml/glGetAttribLocation.xml
 	positionID = glGetAttribLocation(progID, "sv_position");
 	colorID = glGetAttribLocation(progID, "sv_color");
+
+	//input.open("\\input.txt");
+	//if (!input) {
+	//	cerr << "Unable to open file input.txt";
+	//	exit(1);   // call system to stop
+	//}
+
+	//while (input >> string) {
+	//	string = string;
+	//}
 }
 
 void Game::update()

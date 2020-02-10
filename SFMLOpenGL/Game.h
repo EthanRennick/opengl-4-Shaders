@@ -8,6 +8,7 @@
 #include <GL/wglew.h>
 #include <SFML/Window.hpp>
 #include <SFML/OpenGL.hpp>
+#include <fstream>
 
 #include <Vector3.h>
 #include <Matrix3.h>
@@ -32,7 +33,9 @@ private:
 
 	Clock clock;
 	Time elapsed;
-
+	std::ifstream input;
+	std::string string;
+	int x = 0;
 	float rotationAngle = 0.0f;
 };
 
